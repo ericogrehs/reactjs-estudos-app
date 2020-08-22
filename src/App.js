@@ -1,15 +1,20 @@
-import React, { Fragment } from "react";
+import React from "react";
 
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 import { RegisterForm } from "./components";
 
 import "./App.css";
+import "fontsource-roboto";
 
 const App = () => {
   return (
-    <Fragment>
-      <h1>Formulário de Cadastro</h1>
+    <Container component="article" maxWidth="sm">
+      <Typography variant="h3" component="h1" align="center">
+        Formulário de Cadastro
+      </Typography>
       <RegisterForm />
-    </Fragment>
+    </Container>
   );
 };
 
