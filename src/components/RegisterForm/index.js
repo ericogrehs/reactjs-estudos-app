@@ -11,6 +11,7 @@ function RegisterForm({ onSendForm }) {
   const [cpf, setCpf] = useState("");
   const [promotions, setPromotions] = useState(true);
   const [newsletter, setNewsletter] = useState(true);
+  const [errors, setErrors] = useState({});
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -39,7 +40,15 @@ function RegisterForm({ onSendForm }) {
       />
       <TextField
         onChange={({ target: { value } }) => setCpf(value)}
+        onBlur={({ target: { value } }) => {
+          setErrors((errors) => ({
+            ...errors,
+            cpf: value.length !== 11 ? "CPF inválido" : "",
+          }));
+        }}
         value={cpf}
+        error={Boolean(errors.cpf)}
+        helperText={errors.cpf}
         fullWidth
         variant="outlined"
         margin="normal"
