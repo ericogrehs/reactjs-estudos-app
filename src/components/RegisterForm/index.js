@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-function RegisterForm() {
+function RegisterForm({ onSendForm }) {
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [promotions, setPromotions] = useState(true);
+  const [newsletter, setNewsletter] = useState(true);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    onSendForm({ name, lastname, cpf, promotions, newsletter });
+  };
+
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <TextField
+        onChange={({ target: { value } }) => setName(value)}
+        value={name}
         fullWidth
         variant="outlined"
         margin="normal"
@@ -16,6 +29,8 @@ function RegisterForm() {
         label="Nome"
       />
       <TextField
+        onChange={({ target: { value } }) => setLastname(value)}
+        value={lastname}
         fullWidth
         variant="outlined"
         margin="normal"
@@ -23,6 +38,8 @@ function RegisterForm() {
         label="Sobrenome"
       />
       <TextField
+        onChange={({ target: { value } }) => setCpf(value)}
+        value={cpf}
         fullWidth
         variant="outlined"
         margin="normal"
@@ -31,11 +48,25 @@ function RegisterForm() {
       />
       <FormControlLabel
         label="Promoções"
-        control={<Switch name="promotions" defaultChecked color="primary" />}
+        control={
+          <Switch
+            onChange={({ target: { checked } }) => setPromotions(checked)}
+            name="promotions"
+            checked={promotions}
+            color="primary"
+          />
+        }
       />
       <FormControlLabel
         label="Novidades"
-        control={<Switch name="newsletter" defaultChecked color="primary" />}
+        control={
+          <Switch
+            onChange={({ target: { checked } }) => setNewsletter(checked)}
+            name="newsletter"
+            checked={newsletter}
+            color="primary"
+          />
+        }
       />
 
       <Button variant="contained" color="primary" type="submit">

@@ -13,9 +13,13 @@ const App = () => {
       <Typography variant="h3" component="h1" align="center">
         Formulário de Cadastro
       </Typography>
-      <RegisterForm />
+      <RegisterForm onSendForm={onSendForm} />
     </Container>
   );
 };
+
+function onSendForm(data) {
+  console.log(data);
+}
 
 export default App;
