@@ -72,3 +72,4 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 [ ] Validação em todos os campos
 [ ] ESLint e Prettier
 [ ] Root Import
+[ ] BUG: Se não passa pelo blur do field considera válido

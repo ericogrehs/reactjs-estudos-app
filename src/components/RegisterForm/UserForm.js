@@ -2,25 +2,21 @@ import React, { useState, useContext } from "react";
 import { TextField, Button } from "@material-ui/core";
 
 import RegisterFormContext from "../../contexts/RegisterFormContext";
+import useErrors from "../../hooks/useErrors";
 
 function UserForm({ onSendForm }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [errors, setErrors] = useState({ senha: "" });
 
   const validations = useContext(RegisterFormContext);
 
-  const validateField = (event) => {
-    const { name, value } = event.target;
-    setErrors({ ...errors, [name]: validations[name](value) });
-  };
+  const [errors, validateField, isValid] = useErrors(validations);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (Object.values(errors).every((error) => !error))
-          onSendForm({ email, senha });
+        if (isValid()) onSendForm({ email, senha });
       }}
     >
       <TextField
