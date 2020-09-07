@@ -6,6 +6,7 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import RegisterFormContext from "../../contexts/RegisterFormContext";
+import useErrors from "../../hooks/useErrors";
 
 function PersonalDataForm({ onSendForm }) {
   const [name, setName] = useState("");
@@ -13,18 +14,14 @@ function PersonalDataForm({ onSendForm }) {
   const [cpf, setCpf] = useState("");
   const [promotions, setPromotions] = useState(true);
   const [newsletter, setNewsletter] = useState(true);
-  const [errors, setErrors] = useState({ cpf: "" });
 
   const validations = useContext(RegisterFormContext);
 
-  const validateField = ({ target: { name, value } }) => {
-    setErrors({ ...errors, [name]: validations[name](value) });
-  };
+  const [errors, validateField, isValid] = useErrors(validations);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (Object.values(errors).every((error) => !error))
-      onSendForm({ name, lastname, cpf, promotions, newsletter });
+    if (isValid()) onSendForm({ name, lastname, cpf, promotions, newsletter });
   };
 
   return (
