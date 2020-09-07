@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Typography, Stepper, Step, StepLabel } from "@material-ui/core";
 
 import PersonalDataForm from "./PersonalDataForm";
 import UserForm from "./UserForm";
 import ShippingForm from "./ShippingForm";
-import { Typography, Stepper, Step, StepLabel } from "@material-ui/core";
 
 function RegisterForm({ onSendForm }) {
   const [currentStep, setCurrentStep] = useState(0);

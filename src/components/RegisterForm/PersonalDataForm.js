@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+
+import RegisterFormContext from "../../contexts/RegisterFormContext";
 
 function PersonalDataForm({ onSendForm }) {
   const [name, setName] = useState("");
@@ -11,11 +13,18 @@ function PersonalDataForm({ onSendForm }) {
   const [cpf, setCpf] = useState("");
   const [promotions, setPromotions] = useState(true);
   const [newsletter, setNewsletter] = useState(true);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({ cpf: "" });
+
+  const validations = useContext(RegisterFormContext);
+
+  const validateField = ({ target: { name, value } }) => {
+    setErrors({ ...errors, [name]: validations[name](value) });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    onSendForm({ name, lastname, cpf, promotions, newsletter });
+    if (Object.values(errors).every((error) => !error))
+      onSendForm({ name, lastname, cpf, promotions, newsletter });
   };
 
   return (
@@ -40,12 +49,7 @@ function PersonalDataForm({ onSendForm }) {
       />
       <TextField
         onChange={({ target: { value } }) => setCpf(value)}
-        onBlur={({ target: { value } }) => {
-          setErrors((errors) => ({
-            ...errors,
-            cpf: value.length !== 11 ? "CPF inválido" : "",
-          }));
-        }}
+        onBlur={validateField}
         value={cpf}
         error={Boolean(errors.cpf)}
         helperText={errors.cpf}
@@ -53,6 +57,7 @@ function PersonalDataForm({ onSendForm }) {
         variant="outlined"
         margin="normal"
         id="cpf"
+        name="cpf"
         label="CPF"
       />
       <FormControlLabel
