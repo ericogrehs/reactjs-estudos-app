@@ -1,13 +1,19 @@
 import React from "react";
 import { TextField, Button } from "@material-ui/core";
 
-function UserForm() {
+function UserForm({ onSendForm }) {
   return (
-    <form>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSendForm();
+      }}
+    >
       <TextField
         id="email"
         label="email"
         type="email"
+        required
         fullWidth
         variant="outlined"
         margin="normal"
@@ -16,6 +22,7 @@ function UserForm() {
         id="senha"
         label="senha"
         type="password"
+        required
         fullWidth
         variant="outlined"
         margin="normal"
