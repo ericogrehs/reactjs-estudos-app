@@ -1,35 +1,35 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
+import { createGlobalStyle } from "styled-components";
 
-import { RegisterForm } from "./components";
-
-import RegisterFormContext from "./contexts/RegisterFormContext";
-import {
-  validatePassword,
-  validateCpf,
-} from "./validations/RegisterFormValidations";
+import Home from "./routes/Home";
 
 import "./App.css";
 import "fontsource-roboto";
 
+const GlobalStyle = createGlobalStyle`
+  * {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    outline: none;
+  }
+  button, a {
+    cursor: pointer;
+    &:disabled{
+      cursor: not-allowed;
+    }
+  }
+`;
+
 const App = () => {
   return (
     <Container component="article" maxWidth="sm">
-      <Typography variant="h3" component="h1" align="center">
-        Formulário de Cadastro
-      </Typography>
-      <RegisterFormContext.Provider
-        value={{ senha: validatePassword, cpf: validateCpf }}
-      >
-        <RegisterForm onSendForm={onSendForm} />
-      </RegisterFormContext.Provider>
+      <GlobalStyle />
+      <Home />
     </Container>
   );
 };
-
-function onSendForm(data) {
-  console.log(data);
-}
 
 export default App;
