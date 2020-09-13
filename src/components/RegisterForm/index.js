@@ -1,87 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Typography, Stepper, Step, StepLabel } from "@material-ui/core";
 
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import PersonalDataForm from "./PersonalDataForm";
+import UserForm from "./UserForm";
+import ShippingForm from "./ShippingForm";
 
 function RegisterForm({ onSendForm }) {
-  const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [promotions, setPromotions] = useState(true);
-  const [newsletter, setNewsletter] = useState(true);
-  const [errors, setErrors] = useState({});
+  const [currentStep, setCurrentStep] = useState(0);
+  const [dadosColetados, setDadosColetados] = useState({});
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    onSendForm({ name, lastname, cpf, promotions, newsletter });
-  };
+  const forms = [
+    <UserForm onSendForm={coletaDados} />,
+    <PersonalDataForm onSendForm={coletaDados} />,
+    <ShippingForm onSendForm={coletaDados} />,
+    <Typography variant="h5">Obrigado por se cadastrar</Typography>,
+  ];
+
+  useEffect(() => {
+    if (currentStep === forms.length - 1) onSendForm(dadosColetados);
+  }, [dadosColetados, onSendForm, currentStep, forms]);
+
+  function next() {
+    setCurrentStep(currentStep + 1);
+  }
+
+  function coletaDados(dados) {
+    setDadosColetados({ ...dadosColetados, ...dados });
+    next();
+  }
 
   return (
-    <form onSubmit={onSubmit}>
-      <TextField
-        onChange={({ target: { value } }) => setName(value)}
-        value={name}
-        fullWidth
-        variant="outlined"
-        margin="normal"
-        id="name"
-        label="Nome"
-      />
-      <TextField
-        onChange={({ target: { value } }) => setLastname(value)}
-        value={lastname}
-        fullWidth
-        variant="outlined"
-        margin="normal"
-        id="lastname"
-        label="Sobrenome"
-      />
-      <TextField
-        onChange={({ target: { value } }) => setCpf(value)}
-        onBlur={({ target: { value } }) => {
-          setErrors((errors) => ({
-            ...errors,
-            cpf: value.length !== 11 ? "CPF inválido" : "",
-          }));
-        }}
-        value={cpf}
-        error={Boolean(errors.cpf)}
-        helperText={errors.cpf}
-        fullWidth
-        variant="outlined"
-        margin="normal"
-        id="cpf"
-        label="CPF"
-      />
-      <FormControlLabel
-        label="Promoções"
-        control={
-          <Switch
-            onChange={({ target: { checked } }) => setPromotions(checked)}
-            name="promotions"
-            checked={promotions}
-            color="primary"
-          />
-        }
-      />
-      <FormControlLabel
-        label="Novidades"
-        control={
-          <Switch
-            onChange={({ target: { checked } }) => setNewsletter(checked)}
-            name="newsletter"
-            checked={newsletter}
-            color="primary"
-          />
-        }
-      />
-
-      <Button variant="contained" color="primary" type="submit">
-        Cadastrar
-      </Button>
-    </form>
+    <>
+      <Stepper activeStep={currentStep}>
+        <Step>
+          <StepLabel>Login</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Pessoal</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Entrega</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Finalização</StepLabel>
+        </Step>
+      </Stepper>
+      {forms[currentStep]}
+    </>
   );
 }
 
